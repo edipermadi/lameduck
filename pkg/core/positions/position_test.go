@@ -26,3 +26,14 @@ func TestPosition_File(t *testing.T) {
 	require.Equal(t, '7', positions.G7.Rank())
 	require.Equal(t, '8', positions.H8.Rank())
 }
+
+func TestNew(t *testing.T) {
+	require.Equal(t, positions.A1, positions.New('a', '1'))
+	require.Equal(t, positions.B2, positions.New('b', '2'))
+	require.Equal(t, positions.C3, positions.New('c', '3'))
+	require.Equal(t, positions.D4, positions.New('d', '4'))
+	require.Equal(t, positions.E5, positions.New('e', '5'))
+	require.Equal(t, positions.F6, positions.New('f', '6'))
+	require.Equal(t, positions.G7, positions.New('g', '7'))
+	require.Equal(t, positions.H8, positions.New('h', '8'))
+}

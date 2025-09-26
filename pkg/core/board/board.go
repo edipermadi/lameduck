@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/binary"
+	"strconv"
+	"strings"
 
 	"github.com/edipermadi/lameduck/pkg/core/pieces"
+	"github.com/edipermadi/lameduck/pkg/core/positions"
 )
 
 type Board [12]BitBoard
@@ -42,6 +45,38 @@ func (c Board) Grid() Grid {
 			grid.Set(position, piece)
 		}
 	}
-	
+
 	return grid
+}
+
+func (c Board) FEN() string {
+	var sb strings.Builder
+	g := c.Grid()
+	for i := 0; i < 8; i++ {
+		rank := rune('8' - i)
+		emptyCtr := 0
+		for j := 0; j < 8; j++ {
+			file := rune('a' + j)
+			position := positions.New(file, rank)
+			piece := g.Get(position)
+			if piece == pieces.None {
+				emptyCtr += 1
+			} else {
+				if emptyCtr > 0 {
+					sb.WriteString(strconv.Itoa(emptyCtr))
+					emptyCtr = 0
+				}
+
+				sb.WriteString(piece.Code())
+			}
+		}
+		if emptyCtr > 0 {
+			sb.WriteString(strconv.Itoa(emptyCtr))
+		}
+		if i < 7 {
+			sb.WriteRune('/')
+		}
+	}
+
+	return sb.String()
 }

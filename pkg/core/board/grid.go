@@ -16,15 +16,21 @@ func (g *Grid) Set(position positions.Position, piece pieces.Piece) {
 	g[rank][file] = piece
 }
 
+func (g *Grid) Get(position positions.Position) pieces.Piece {
+	file := int(position.File() - 'a')
+	rank := int(position.Rank() - '1')
+	return g[rank][file]
+}
+
 func (g *Grid) String() string {
 	var sb strings.Builder
 	sb.WriteString("┌───┬───┬───┬───┬───┬───┬───┬───┐\n")
-	for file, files := range g {
-		for _, piece := range files {
+	for row, allPieces := range g {
+		for _, piece := range allPieces {
 			sb.WriteString(fmt.Sprintf("│%*s ", 2, piece.Figure()))
 		}
 		sb.WriteString("│\n")
-		if file < 7 {
+		if row < 7 {
 			sb.WriteString("├───┼───┼───┼───┼───┼───┼───┼───┤\n")
 		}
 	}

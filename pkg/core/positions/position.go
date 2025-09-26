@@ -76,6 +76,12 @@ const (
 	H8 Position = iota
 )
 
+func New(file rune, rank rune) Position {
+	rankInt := int(rank - '1')
+	fileInt := int(file - 'a')
+	return Position((rankInt * 8) + fileInt)
+}
+
 func (p Position) Mask() uint64 {
 	return 1 << p
 }
