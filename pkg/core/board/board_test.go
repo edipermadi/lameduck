@@ -20,3 +20,15 @@ func TestFEN(t *testing.T) {
 	require.Equal(t, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", fen)
 	t.Logf("fen: %s", fen)
 }
+
+func TestPieces(t *testing.T) {
+	b := board.New()
+	b.Pieces()
+	t.Logf("pieces = %+v", b.Pieces())
+}
+
+func TestPiecesMap(t *testing.T) {
+	b := board.New()
+	b.Pieces()
+	t.Logf("pieces map = %+v", b.PiecesMap())
+}

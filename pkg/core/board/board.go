@@ -21,27 +21,57 @@ func New() Board {
 	return board
 }
 
-func (c Board) ToBase64() string {
-	return base64.StdEncoding.EncodeToString(c.Bytes())
+func (b Board) ToBase64() string {
+	return base64.StdEncoding.EncodeToString(b.Bytes())
 }
 
-func (c Board) Bytes() []byte {
+func (b Board) Bytes() []byte {
 	var buffer bytes.Buffer
-	for _, v := range c {
+	for _, v := range b {
 		_ = binary.Write(&buffer, binary.BigEndian, v)
 	}
 	return buffer.Bytes()
 }
 
-func (c Board) Movements() []Board {
+func (b Board) Movements() []Board {
 	return nil
 }
 
-func (c Board) Grid() Grid {
+func (b Board) Pieces() []pieces.Piece {
+	allPositions := positions.AllPositions()
+	allPieces := pieces.AllPieces()
+	result := make([]pieces.Piece, len(allPositions))
+	for _, position := range allPositions {
+		for _, piece := range allPieces {
+			if bitmask := b[piece-1]; bitmask.Has(position) {
+				result[position] = piece
+				break
+			}
+		}
+	}
+	return result
+}
+
+func (b Board) PiecesMap() map[positions.Position]pieces.Piece {
+	allPositions := positions.AllPositions()
+	allPieces := pieces.AllPieces()
+	result := make(map[positions.Position]pieces.Piece)
+	for _, position := range allPositions {
+		for _, piece := range allPieces {
+			if bitmask := b[piece-1]; bitmask.Has(position) {
+				result[position] = piece
+				break
+			}
+		}
+	}
+	return result
+}
+
+func (b Board) Grid() Grid {
 	var grid Grid
 
 	for _, piece := range pieces.AllPieces() {
-		for _, position := range c[piece-1].Positions() {
+		for _, position := range b[piece-1].Positions() {
 			grid.Set(position, piece)
 		}
 	}
@@ -49,9 +79,9 @@ func (c Board) Grid() Grid {
 	return grid
 }
 
-func (c Board) FEN() string {
+func (b Board) FEN() string {
 	var sb strings.Builder
-	g := c.Grid()
+	g := b.Grid()
 	for i := 0; i < 8; i++ {
 		rank := rune('8' - i)
 		emptyCtr := 0

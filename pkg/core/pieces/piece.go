@@ -1,5 +1,7 @@
 package pieces
 
+import "github.com/edipermadi/lameduck/pkg/core/colors"
+
 type Piece int
 
 const (
@@ -36,6 +38,7 @@ func AllPieces() []Piece {
 }
 
 var codes = map[Piece]string{
+	None:        " ",
 	BlackBishop: "b",
 	BlackKing:   "k",
 	BlackKnight: "n",
@@ -51,6 +54,7 @@ var codes = map[Piece]string{
 }
 
 var figures = map[Piece]string{
+	None:        " ",
 	BlackBishop: "♝",
 	BlackKing:   "♚",
 	BlackKnight: "♞",
@@ -66,6 +70,7 @@ var figures = map[Piece]string{
 }
 
 var names = map[Piece]string{
+	None:        "None",
 	BlackBishop: "BlackBishop",
 	BlackKing:   "BlackKing",
 	BlackKnight: "BlackKnight",
@@ -90,4 +95,16 @@ func (p Piece) Figure() string {
 
 func (p Piece) String() string {
 	return names[p]
+}
+
+func (p Piece) Color() colors.Color {
+	if p > WhiteRook || p < BlackBishop {
+		return colors.None
+	}
+
+	if p < WhiteBishop {
+		return colors.Black
+	}
+
+	return colors.White
 }

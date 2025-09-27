@@ -53,12 +53,15 @@ func NewBitBoard(piece pieces.Piece) BitBoard {
 }
 
 func (b BitBoard) Positions() []positions.Position {
-	value := uint64(b)
 	result := make([]positions.Position, 0)
 	for _, position := range positions.AllPositions() {
-		if value&position.Mask() > 0 {
+		if b.Has(position) {
 			result = append(result, position)
 		}
 	}
 	return result
+}
+
+func (b BitBoard) Has(position positions.Position) bool {
+	return uint64(b)&position.Mask() > 0
 }
